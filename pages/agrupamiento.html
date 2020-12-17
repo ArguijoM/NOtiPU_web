@@ -1,0 +1,414 @@
+ <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>AdminLTE 3 | DataTables</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+ <!-- SE VA A COPEAR TAMBIEN -->
+ <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+    </li>
+  </ul>
+</nav>
+<!-- /.navbar -->
+
+<!-- Main Sidebar Container MENU GRIS -->
+<!-- SE COPIA Y PEGA TODO EL ASIDE -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+  <a href="inicio.html" class="brand-link">
+    <img src="../dist/img/AdminLTELogo.png"
+         alt="AdminLTE Logo"
+         class="brand-image img-circle elevation-3"
+         style="opacity: .8">
+    <span class="brand-text font-weight-light"><b>N</b>o<b>T</b>i<b>PU</b></span>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+        <li class="nav-item">
+          <a href="notificacion.html" class="nav-link">
+            <i class="nav-icon fas fa-list"></i>
+            <p>Notificaciónes</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="agrupamiento.html" class="nav-link">
+            <i class="nav-icon fas fa-table"></i>
+            <p>Agrupamientos</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="../index.html" class="nav-link" onclick="logout();">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Salir</p>
+          </a>
+        </li>
+        
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Nuevo grupo</h1>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-12">
+          
+          <!-- /.card -->
+
+          <div class="card">
+            <!-- /.card-header -->
+            <div class="card-body"> 
+              
+              <div style="text-align: right;">
+               <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">
+                  Nuevo
+                </button>
+              </div>
+              <br>
+
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr align="center">
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Acciones</th>
+                </tr>
+                </thead>
+
+                <tr align="center">
+                  <td>Becas</td>
+                  <td>Para Becas</td>
+                  <td><div align="right"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar" onclick="IdenticaActualizar('+tipo_evento.id+');">U</button></td>
+                    <td><div align="left"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-editar" onclick="IdenticaActualizar('+tipo_evento.id+');">E</button></td>
+                </tr>
+
+                <tr align="center">
+                  <td>Credenciales</td>
+                  <td>Para nuevo ingreso</td>
+                  <td><div align="right"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar" onclick="IdenticaActualizar('+tipo_evento.id+');">U</button></td>
+                  <td><div align="left"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-editar" onclick="IdenticaActualizar('+tipo_evento.id+');">E</button></td>
+                </tr>
+
+                <tr align="center">
+                  <td>BEIFI</td>
+                  <td>Para Becas BEIFI</td>
+                  <td><div align="right"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar" onclick="IdenticaActualizar('+tipo_evento.id+');">U</button></td>
+                  <td><div align="left"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-editar" onclick="IdenticaActualizar('+tipo_evento.id+');">E</button></td>
+                </tr>
+
+                <tr align="center">
+                  <td>Delfin</td>
+                  <td>Grupo Delfin</td>
+                  <td><div align="right"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar" onclick="IdenticaActualizar('+tipo_evento.id+');">U</button></td>
+                  <td><div align="left"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-editar" onclick="IdenticaActualizar('+tipo_evento.id+');">E</button></td>
+                </tr>
+                
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div><!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  
+  
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!--divs propios-->
+<div class="modal fade" id="modal-eliminar">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-body">
+              <p>¿Quieres eliminar el evento...</p>
+              <label id="elementoEliminar"> </label>
+              <label>? </label>
+            </div>
+            <div class="modal-footer" style="text-align: right;">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-primary" onclick="ActionDelete();" data-dismiss="modal">Aceptar</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" id="modal-editar">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Editar grupo</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+           <!-- <div class="card card-info">
+               form start 
+
+              <div class="card-body">-->
+                  <div class="form-group row">
+                    <label for="nombreEvento" class="col-sm-12 col-form-label">Nombre del evento:</label>
+                  <div class="col-sm-12">
+                    <input type="text" class="form-control" id="nombre" placeholder="Ingrese un nombre">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="descripcion" class="col-sm-12 col-form-label">Descripción: </label>
+                    <div class="col-sm-12">
+                      <input type="text" class="form-control" id="descripcionEvento" placeholder="Ingrese una descripción">
+                    </div>
+                 </div>
+             <!-- </div>
+              form finish 
+            </div>-->
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="ActionCreate();">Guardar</button>
+            </div>
+          </div>
+          
+        </div>
+        </div>
+       
+</div>
+
+
+<div class="modal fade" id="modal-actualizar">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Actualizar Grupo</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            <!--<div class="card card-info">
+               form start 
+
+              <div class="card-body">-->
+                  <div class="form-group row">
+                    <label for="nombreEventoAct" class="col-sm-12 col-form-label">Nombre del evento:</label>
+                  <div class="col-sm-12">
+                    <input type="text" class="form-control" id="nombreEventoAct" placeholder="Simposium">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="descripcionEventoAct" class="col-sm-12 col-form-label">Descripción: </label>
+                    <div class="col-sm-12">
+                      <input type="text" class="form-control" id="descripcionEventoAct" placeholder="Solo eventos internos">
+                    </div>
+                 </div>
+            <!-- </div>
+               form finish 
+            </div>-->
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="ActionUpdate();">Actualizar</button>
+            </div>
+          </div>
+          
+        </div>
+        </div>
+</div>
+
+<div class="modal fade" id="modal-default">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Asignar grupo</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table id="example1" class="table table-bordered table-striped">
+          <thead>
+          <tr align="center">
+            <th>Nombre</th>
+            <th>Función</th>
+            <th>Acción</th>
+          </tr>
+          </thead>
+
+          <tr align="center">
+            <td>Ada Lovelace</td>
+            <td>Alumno</td>
+            <td>
+             <button type="button" class="btn btn-primary" data-toggle="modal" >E</button> 
+            </td>
+          </tr>
+
+          <tr align="center">
+            <td>Grace Hopper</td>
+            <td>PAAE</td>
+            <td>
+             <button type="button" class="btn btn-primary" data-toggle="modal">E</button> 
+            </td>
+          </tr>
+
+          <tr align="center">
+            <td>Margaret Hamilton</td>
+            <td>Alumno</td>
+            <td>
+             <button type="button" class="btn btn-primary" data-toggle="modal" >E</button> 
+            </td>
+          </tr>
+          <tr align="center">
+            <td>John Clarke</td>
+            <td>Docente</td>
+            <td>
+             <button type="button" class="btn btn-primary" data-toggle="modal" >E</button> 
+            </td>
+          </tr>
+        </table>
+        <div class="modal-footer justify-content-between">
+          <div class="mb-3">
+            <select id="Select" class="form-select">
+              <option>Seleccione un grupo</option>
+            </select>
+          </div>
+          <button type="button"  class="btn btn-default">Asignar</button>
+        </div> 
+        <table id="example1" class="table table-bordered table-striped">
+          <thead>
+          <tr align="center">
+            <th>Nombre</th>
+            <th>Función</th>
+            <th>Acción</th>
+          </tr>
+          </thead>
+
+          <tr align="center">
+            <td>Ada Lovelace</td>
+            <td>Alumno</td>
+            <td>
+             <button type="button" class="btn btn-primary" data-toggle="modal" >E</button> 
+            </td>
+          </tr>
+
+          <tr align="center">
+            <td>Grace Hopper</td>
+            <td>Docente</td>
+            <td>
+             <button type="button" class="btn btn-primary" data-toggle="modal" >E</button> 
+            </td>
+          </tr>
+        </table>
+        <div class="modal-footer justify-content-between">
+          <button type="button"  class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div> 
+
+    </div>
+    
+  </div>
+  </div>
+ 
+</div>
+<!--divs propios final-->
+
+
+
+<!-- jQuery -->
+<script src="../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables -->
+<script src="../plugins/datatables/jquery.dataTables.js"></script>
+<script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+<!-- AdminLTE App -->
+<script src="../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../dist/js/demo.js"></script>
+<!-- page script -->
+
+<!-- NUESTROS SCRIPTS-->
+<script src="../js/login.js"></script>
+<script src="../js/evento.js"></script>
+
+
+<script>
+
+  $(function () {
+   
+   verificaLogin();
+   
+   })
+
+  $(function () {
+
+    ActionRead();
+
+    $("#example1").DataTable();
+
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+    });
+
+  });
+</script>
+</body>
+</html>
