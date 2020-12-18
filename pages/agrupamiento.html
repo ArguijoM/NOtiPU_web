@@ -39,7 +39,7 @@
          alt="AdminLTE Logo"
          class="brand-image img-circle elevation-3"
          style="opacity: .8">
-    <span class="brand-text font-weight-light"><b>NO</b><b>T</b>i<b>PU</b></span>
+    <span class="brand-text font-weight-light"><b>NO</b>ti<b>PU</b></span>
   </a>
 
   <!-- Sidebar -->
@@ -122,9 +122,9 @@
                   <td>Becas</td>
                   <td>Para becas</td>
                   <td>
-                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">U</button>
-                   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar">E</button>
-                   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">A</button> 
+                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar"><i class="fas fa-edit"></i></button>
+                   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar"><i class="fas fa-trash-alt"></i></button>
+                   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default"><i class="fas fa-user-friends"></i></button> 
                   </td>
                 </tr>
 
@@ -132,9 +132,9 @@
                   <td>Credenciales</td>
                   <td>Para nuevo ingreso</td>
                   <td>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">U</button>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar">E</button>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">A</button> 
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar"><i class="fas fa-edit"></i></button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar"><i class="fas fa-trash-alt"></i></i></button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default"><i class="fas fa-user-friends"></i></button> 
                   </td>
                 </tr>
 
@@ -142,18 +142,18 @@
                   <td>BEIFI</td>
                   <td>Para becas BEIFI</td>
                   <td>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">U</button>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar">E</button>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">A</button> 
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar"><i class="fas fa-edit"></i></button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar"><i class="fas fa-trash-alt"></i></i></button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default"><i class="fas fa-user-friends"></i></button> 
                   </td>
                 </tr>
                 <tr align="center">
                   <td>Delfin</td>
                   <td>Grupo Delfin</td>
                   <td>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">U</button>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar">E</button>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">A</button> 
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar"><i class="fas fa-edit"></i></button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar"><i class="fas fa-trash-alt"></i></button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default"><i class="fas fa-user-friends"></i></button> 
                   </td>
                 </tr>
               </table>
@@ -186,16 +186,30 @@
 
 <!--divs propios-->
 <div class="modal fade" id="modal-eliminar">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog">
           <div class="modal-content">
-            <div class="modal-body">
-              <p>¿Quieres eliminar el grupo?</p>
-              <label id="elementoEliminar"> </label>
-              <label>Eliminar...</label>
+            
+              <div class="modal-header">
+                <h4 class="modal-title">¿Esta seguro que desea eliminar?</h4>
+              </div>
+              <div class="modal-body justify-content-between">
+                <table >
+                  <thead class="thead-light">
+                    <tr>
+                      <td style="font-size:120%" width="120" ><b>Nombre</b></th>
+                      <td style="font-size:120%" width="120">Nombre</td>
+                    </tr>
+                    <tr>
+                      <td style="font-size:120%" width="120"><b>Descripción</b></th>
+                      <td style="font-size:120%" width="120">Descripción</td>
+                    </tr>
+                  </thead>
+                </table>
+                
             </div>
-            <div class="modal-footer" style="text-align: right;">
+            <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-primary" onclick="ActionDelete();" data-dismiss="modal">Aceptar</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="ActionCreate();">Eliminar</button>
             </div>
           </div>
           <!-- /.modal-content -->
