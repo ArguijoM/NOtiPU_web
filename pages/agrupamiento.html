@@ -102,7 +102,7 @@
             <div class="card-body"> 
               
               <div style="text-align: right;">
-               <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">
+               <button type="button" class="btn btn-light" data-toggle="modal" data-target="#modal-nuevo">
                   Nuevo
                 </button>
               </div>
@@ -112,40 +112,48 @@
               <table id="example2" class="table table-bordered table-striped">
                 <thead>
                 <tr align="center">
-                  <th>Asunto</th>
-                  <th>Grupo</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
                   <th>Acción</th>
                 </tr>
                 </thead>
 
                 <tr align="center">
                   <td>Becas</td>
-                  <td>Todos</td>
+                  <td>Para becas</td>
                   <td>
-                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">Ver</button> 
+                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">U</button>
+                   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar">E</button>
+                   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">A</button> 
                   </td>
                 </tr>
 
                 <tr align="center">
                   <td>Credenciales</td>
-                  <td>Todos</td>
+                  <td>Para nuevo ingreso</td>
                   <td>
-                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">Ver</button> 
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">U</button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar">E</button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">A</button> 
                   </td>
                 </tr>
 
                 <tr align="center">
                   <td>BEIFI</td>
-                  <td>Grupo BEIFI</td>
+                  <td>Para becas BEIFI</td>
                   <td>
-                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">Ver</button> 
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">U</button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar">E</button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">A</button> 
                   </td>
                 </tr>
                 <tr align="center">
                   <td>Delfin</td>
                   <td>Grupo Delfin</td>
                   <td>
-                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">Ver</button> 
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">U</button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar">E</button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">A</button> 
                   </td>
                 </tr>
               </table>
@@ -181,9 +189,9 @@
         <div class="modal-dialog modal-sm">
           <div class="modal-content">
             <div class="modal-body">
-              <p>¿Quieres eliminar el evento...</p>
+              <p>¿Quieres eliminar el grupo?</p>
               <label id="elementoEliminar"> </label>
-              <label>? </label>
+              <label>Eliminar...</label>
             </div>
             <div class="modal-footer" style="text-align: right;">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -253,18 +261,19 @@
 
               <div class="card-body">-->
                   <div class="form-group row">
-                    <label for="nombreEventoAct" class="col-sm-12 col-form-label">Nombre del evento:</label>
+                    <label for="nombreEventoAct" class="col-sm-12 col-form-label">Nombre del grupo:</label>
                   <div class="col-sm-12">
-                    <input type="text" class="form-control" id="nombreEventoAct" placeholder="Simposium">
+                    <input type="text" class="form-control" id="nombreEventoAct" placeholder="Nombre">
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label for="descripcionEventoAct" class="col-sm-12 col-form-label">Descripción: </label>
                     <div class="col-sm-12">
-                      <input type="text" class="form-control" id="descripcionEventoAct" placeholder="Solo eventos internos">
+                      <input type="text" class="form-control" id="descripcionEventoAct" placeholder="Descripción">
                     </div>
                  </div>
+
             <!-- </div>
                form finish 
             </div>-->
@@ -366,6 +375,48 @@
           <button type="button"  class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         </div> 
 
+    </div>
+    
+  </div>
+  </div>
+ 
+</div>
+
+<div class="modal fade" id="modal-nuevo">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Agregar Grupo</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <!--<div class="card card-info">
+         form start 
+
+        <div class="card-body">-->
+            <div class="form-group row">
+              <label for="nombreEventoAct" class="col-sm-12 col-form-label">Nombre del grupo:</label>
+            <div class="col-sm-12">
+              <input type="text" class="form-control" id="nombreEventoAct" placeholder="Nombre">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="descripcionEventoAct" class="col-sm-12 col-form-label">Descripción: </label>
+              <div class="col-sm-12">
+                <textarea class="form-control" id="texAreaText" rows="3" placeholder="Descripción"></textarea>
+              </div>
+           </div>
+
+      <!-- </div>
+         form finish 
+      </div>-->
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="ActionUpdate();">Guardar</button>
+      </div>
     </div>
     
   </div>
