@@ -291,11 +291,12 @@
             <!-- </div>
                form finish 
             </div>-->
+          </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
               <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="ActionUpdate();">Actualizar</button>
             </div>
-          </div>
+          
           
         </div>
         </div>
@@ -311,7 +312,6 @@
         </button>
       </div>
       <div class="modal-body">
-        
         <table id="example3" class="table table-bordered table-striped">
           <thead>
           <tr align="center">
@@ -352,45 +352,46 @@
             </td>
           </tr>
         </table>
+      </div>
         <div class="modal-footer justify-content-between">
-          <div class="mb-3">
+          <div class="mb-10">
             <select id="Select" class="form-select">
               <option>Seleccione un grupo</option>
             </select>
           </div>
           <button type="button"  class="btn btn-default">Asignar</button>
         </div> 
-        <table id="example1" class="table table-bordered table-striped">
-          <thead>
-          <tr align="center">
-            <th>Nombre</th>
-            <th>Función</th>
-            <th>Acción</th>
-          </tr>
-          </thead>
-
-          <tr align="center">
-            <td>Ada Lovelace</td>
-            <td>Alumno</td>
-            <td>
-             <button type="button" class="btn btn-primary" data-toggle="modal" >E</button> 
-            </td>
-          </tr>
-
-          <tr align="center">
-            <td>Grace Hopper</td>
-            <td>Docente</td>
-            <td>
-             <button type="button" class="btn btn-primary" data-toggle="modal" >E</button> 
-            </td>
-          </tr>
-        </table>
-        <div class="modal-footer justify-content-between">
+        <div class="modal-body">
+          <table id="example1" class="table table-bordered table-striped">
+            <thead>
+            <tr align="center">
+              <th>Nombre</th>
+              <th>Función</th>
+              <th>Acción</th>
+            </tr>
+            </thead>
+  
+            <tr align="center">
+              <td>Ada Lovelace</td>
+              <td>Alumno</td>
+              <td>
+               <button type="button" class="btn btn-primary" data-toggle="modal" >E</button> 
+              </td>
+            </tr>
+  
+            <tr align="center">
+              <td>Grace Hopper</td>
+              <td>PAAE</td>
+              <td>
+               <button type="button" class="btn btn-primary" data-toggle="modal">E</button> 
+              </td>
+            </tr>
+  
+          </table>
+        </div>
+        <div class="modal-footer justify-content-end">
           <button type="button"  class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         </div> 
-
-    </div>
-    
   </div>
   </div>
  
@@ -427,11 +428,12 @@
       <!-- </div>
          form finish 
       </div>-->
+    </div>
       <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="ActionUpdate();">Guardar</button>
       </div>
-    </div>
+    
     
   </div>
   </div>
@@ -463,13 +465,32 @@
   $(function () {
     
     ActionRead();
-
-    $("#example1").DataTable({
-      "paging": false,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": false,
-      "info": false,
+    $('#example1').DataTable({
+      language: {
+        "decimal": "",
+        "emptyTable": "No hay información",
+        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+        "infoPostFix": "",
+        "thousands": ",",
+        "lengthMenu": "Mostrar _MENU_ Entradas",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords": "Sin resultados encontrados",
+        "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+        }
+    },
+      "paging": true,
+      "lengthChange": true,
+      "searching": true,
+      "ordering": true,
+      "info": true,
       "autoWidth": true,
     });
 
@@ -523,15 +544,16 @@
             "previous": "Anterior"
         }
     },
-      "paging": false,
-      "lengthChange": false,
+      "paging": true,
+      "lengthChange": true,
       "searching": true,
       "ordering": true,
-      "info": false,
-      "autoWidth": false,
+      "info": true,
+      "autoWidth": true,
     });
 
   });
+  
 
   $(function () {
    
