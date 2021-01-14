@@ -176,36 +176,7 @@ $(document).ready(function() {
                 </tr>
                 </thead>
 
-                <tr align="center">
-                  <td>Becas</td>
-                  <td>Todos</td>
-                  <td>
-                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">Ver</button> 
-                  </td>
-                </tr>
-
-                <tr align="center">
-                  <td>Credenciales</td>
-                  <td>Todos</td>
-                  <td>
-                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">Ver</button> 
-                  </td>
-                </tr>
-
-                <tr align="center">
-                  <td>BEIFI</td>
-                  <td>Grupo BEIFI</td>
-                  <td>
-                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">Ver</button> 
-                  </td>
-                </tr>
-                <tr align="center">
-                  <td>Delfin</td>
-                  <td>Grupo Delfin</td>
-                  <td>
-                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar">Ver</button> 
-                  </td>
-                </tr>
+                
               </table>
             </div>
             <!-- /.card-body -->
@@ -260,7 +231,7 @@ $(document).ready(function() {
 </div>
 
 
-<div class="modal fade" id="modal-actualizar">
+<div class="modal fade" id="modal-ver">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -271,38 +242,38 @@ $(document).ready(function() {
             </div>
             <div class="modal-body">
               <!-- form start -->   
-              <table class="table table-striped">      
+              <table class="table table-striped" id="tablaActualizar">      
                 <tbody>
                   <tr>
-                    <td><b>Asunto</b></td>
+                    <td>Asunto</td>
                     <td></td>
                   </tr>
                   <tr>
-                    <td>Reunión</td>
+                    <td> <label id="asunto"></label> </td>
                     <td></td>
                   </tr>
                   <tr>
-                    <td><b>Destinatarios</b></td>
+                    <td>Destinatarios</td>
                     <td></td>
                   </tr>
                   <tr>
-                    <td>Academia de Sistemas</td>
+                    <td> <label id="destinatario"></label> </td>
                     <td></td>
                   </tr>
                   <tr>
-                    <td><b>Descripción</b></td>
+                    <td>Descripción</td>
                     <td></td>
                   </tr>
                   <tr>
-                    <td>Se le cita a reunión de academia el próximo jueves 10 de diciembre</td>
+                    <td> <label id="descripcion"></label> </td>
                     <td></td>
                   </tr>
                   <tr>
-                    <td><b>Fecha</b></td>
+                    <td>Fecha</td>
                     <td></td>
                   </tr>
                   <tr>
-                    <td>23 de noviembre de 2020</td>
+                    <td> <label id="fecha"></label> </td>
                     <td></td>
                   </tr>
                 </tbody>
@@ -331,34 +302,30 @@ $(document).ready(function() {
         </button>
       </div>
       <div class="modal-body">
-      
-        <!-- form start -->
-
-        
             <div class="form-group row">
-              <!--
-              <label for="nombreEventoA" class="col-sm-12 col-form-label">Evento:</label>
-            -->
               <div class="col-sm-12">
-              <input type="text" class="form-control" id="nombreEventoA" placeholder="Asunto">
+              <input type="text" class="form-control" id="nuevoAsunto" placeholder="Asunto">
               </div>
-
             </div>
-
             <div class="row">
               <div class="col-sm-12">
                 <!-- textarea -->
                 <div class="form-group">
                   <!--<label>Descripción</label> -->
-                  <textarea class="form-control" id="texAreaText" rows="3" placeholder="Descripción..."></textarea>
+                  <textarea class="form-control" id="nuevaDescripcion" rows="3" placeholder="Descripción..."></textarea>
                 </div>
               </div>
             </div>
+            <script>
+              $(function () {
+                generarGrupos();
+              })
+          </script>
 
            <div class="form-group">
             <label for="sel1">Selecciona grupo</label>
-            <select class="form-control" id="tipoEventoA">
-              <option>Seleccione un grupo</option>
+            <select class="form-control" id="nuevoGrupo">
+              
             </select>
           </div> 
       </div>
@@ -367,7 +334,7 @@ $(document).ready(function() {
       
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary">Guardar</button>
+          <button type="button" class="btn btn-primary" onclick="guardarNotificacion();">Guardar</button>
         </div>
     </div>
     
@@ -574,7 +541,7 @@ $(document).ready(function() {
 <script>
   $(function () {
    
-    verificaLogin();
+    //verificaLogin();
     //Date range picker with time picker
     $('#fechaNuevo').daterangepicker({
       timePicker: true,
@@ -617,7 +584,7 @@ $(document).ready(function() {
 <script>
   $(function () {
     
-    ActionRead();
+    generarNotificaciones();
 
     $("#example1").DataTable();
 

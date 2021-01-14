@@ -17,6 +17,12 @@
 .fc-button:hover, .fc-button:active, .fc-button.hover {
   background-color: #e9e9e9;
 }
+td {border: 1px #DDD solid; padding: 5px; cursor: pointer;} 
+
+.selected { 
+    background-color: brown; 
+    color: #FFF; 
+} 
 
 .fc-header-title h2 {
   color: #666;

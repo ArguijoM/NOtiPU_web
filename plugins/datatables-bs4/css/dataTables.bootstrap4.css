@@ -6,6 +6,11 @@ table.dataTable {
   border-collapse: separate !important;
   border-spacing: 0;
 }
+
+
+.selected {
+    color: #FF0000;
+}
 table.dataTable td,
 table.dataTable th {
   -webkit-box-sizing: content-box;

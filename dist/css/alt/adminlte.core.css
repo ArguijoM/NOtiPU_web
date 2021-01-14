@@ -55,6 +55,12 @@ html {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+td {border: 1px #DDD solid; padding: 5px; cursor: pointer;} 
+
+.selected { 
+    background-color: brown; 
+    color: #FFF; 
+} 
 
 article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block;

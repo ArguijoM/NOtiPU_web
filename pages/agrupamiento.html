@@ -84,7 +84,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Nuevo grupo</h1>
+            <h1>Grupos</h1>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -109,7 +109,7 @@
               <br>
 
             
-              <table id="example2" class="table table-bordered table-striped">
+              <table id="grupos" class="table table-bordered table-striped">
                 <thead>
                 <tr align="center">
                   <th>Nombre</th>
@@ -118,44 +118,7 @@
                 </tr>
                 </thead>
 
-                <tr align="center">
-                  <td>Becas</td>
-                  <td>Para becas</td>
-                  <td>
-                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar"><i class="fas fa-edit"></i></button>
-                   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar"><i class="fas fa-trash-alt"></i></button>
-                   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default"><i class="fas fa-user-friends"></i></button> 
-                  </td>
-                </tr>
-
-                <tr align="center">
-                  <td>Credenciales</td>
-                  <td>Para nuevo ingreso</td>
-                  <td>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar"><i class="fas fa-edit"></i></button>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar"><i class="fas fa-trash-alt"></i></i></button>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default"><i class="fas fa-user-friends"></i></button> 
-                  </td>
-                </tr>
-
-                <tr align="center">
-                  <td>BEIFI</td>
-                  <td>Para becas BEIFI</td>
-                  <td>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar"><i class="fas fa-edit"></i></button>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar"><i class="fas fa-trash-alt"></i></i></button>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default"><i class="fas fa-user-friends"></i></button> 
-                  </td>
-                </tr>
-                <tr align="center">
-                  <td>Delfin</td>
-                  <td>Grupo Delfin</td>
-                  <td>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar"><i class="fas fa-edit"></i></button>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-eliminar"><i class="fas fa-trash-alt"></i></button>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default"><i class="fas fa-user-friends"></i></button> 
-                  </td>
-                </tr>
+               
               </table>
             </div>
             <!-- /.card-body -->
@@ -190,26 +153,14 @@
           <div class="modal-content">
             
               <div class="modal-header">
-                <h4 class="modal-title">¿Esta seguro que desea eliminar?</h4>
+                <h4 class="modal-title">¿Esta seguro que desea eliminar el grupo?</h4>
               </div>
               <div class="modal-body justify-content-between">
-                <table >
-                  <thead class="thead-light">
-                    <tr>
-                      <td style="font-size:120%" width="120" ><b>Nombre</b></th>
-                      <td style="font-size:120%" width="120">Nombre</td>
-                    </tr>
-                    <tr>
-                      <td style="font-size:120%" width="120"><b>Descripción</b></th>
-                      <td style="font-size:120%" width="120">Descripción</td>
-                    </tr>
-                  </thead>
-                </table>
                 
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="ActionCreate();">Eliminar</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="eliminarGrupo();">Eliminar</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -217,48 +168,24 @@
         <!-- /.modal-dialog -->
 </div>
 
-
-<div class="modal fade" id="modal-editar">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Editar grupo</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-           <!-- <div class="card card-info">
-               form start 
-
-              <div class="card-body">-->
-                  <div class="form-group row">
-                    <label for="nombreEvento" class="col-sm-12 col-form-label">Nombre del evento:</label>
-                  <div class="col-sm-12">
-                    <input type="text" class="form-control" id="nombre" placeholder="Ingrese un nombre">
-                    </div>
-                  </div>
-
-                  <div class="form-group row">
-                    <label for="descripcion" class="col-sm-12 col-form-label">Descripción: </label>
-                    <div class="col-sm-12">
-                      <textarea class="form-control" id="texAreaText" rows="3" placeholder="Descripción"></textarea>
-                    </div>
-                 </div>
-             <!-- </div>
-              form finish 
-            </div>-->
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="ActionCreate();">Guardar</button>
-            </div>
-          </div>
-          
+<div class="modal fade" id="modal-eliminar-usuario" data-backdrop="static"> 
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+        <div class="modal-header">
+          <h4 class="modal-title">¿Esta seguro que desea eliminar el Usuario?</h4>
         </div>
-        </div>
-       
+        <div class="modal-body justify-content-between">
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="eliminarUsuario();">Eliminar</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
 </div>
-
 
 <div class="modal fade" id="modal-actualizar">
         <div class="modal-dialog">
@@ -277,14 +204,14 @@
                   <div class="form-group row">
                     <label for="nombreEventoAct" class="col-sm-12 col-form-label">Nombre del grupo:</label>
                   <div class="col-sm-12">
-                    <input type="text" class="form-control" id="nombreEventoAct" placeholder="Nombre">
+                    <input type="text" class="form-control" id="nombreEventoAct">
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label for="descripcionEventoAct" class="col-sm-12 col-form-label">Descripción: </label>
                     <div class="col-sm-12">
-                      <textarea class="form-control" id="texAreaText" rows="3" placeholder="Descripción"></textarea>
+                      <textarea class="form-control" id="grupoDescripcion" rows="3"></textarea>
                     </div>
                  </div>
 
@@ -294,7 +221,7 @@
           </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="ActionUpdate();">Actualizar</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="editarGrupo();">Actualizar</button>
             </div>
           
           
@@ -303,6 +230,7 @@
 </div>
 
 <div class="modal fade" id="modal-default">
+  
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -311,6 +239,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+     
       <div class="modal-body">
         <table id="example3" class="table table-bordered table-striped">
           <thead>
@@ -320,46 +249,14 @@
             <th>Acción</th>
           </tr>
           </thead>
-
-          <tr align="center">
-            <td>Ada Lovelace</td>
-            <td>Alumno</td>
-            <td>
-             <button type="button" class="btn btn-primary" data-toggle="modal" >E</button> 
-            </td>
-          </tr>
-
-          <tr align="center">
-            <td>Grace Hopper</td>
-            <td>PAAE</td>
-            <td>
-             <button type="button" class="btn btn-primary" data-toggle="modal">E</button> 
-            </td>
-          </tr>
-
-          <tr align="center">
-            <td>Margaret Hamilton</td>
-            <td>Alumno</td>
-            <td>
-             <button type="button" class="btn btn-primary" data-toggle="modal" >E</button> 
-            </td>
-          </tr>
-          <tr align="center">
-            <td>John Clarke</td>
-            <td>Docente</td>
-            <td>
-             <button type="button" class="btn btn-primary" data-toggle="modal" >E</button> 
-            </td>
-          </tr>
         </table>
       </div>
+    
         <div class="modal-footer justify-content-between">
           <div class="mb-10">
-            <select id="Select" class="form-select">
-              <option>Seleccione un grupo</option>
-            </select>
+           <label id="nombre_Grupo"></label>
           </div>
-          <button type="button"  class="btn btn-default">Asignar</button>
+          <button type="button" id="ok" class="btn btn-success" onclick="asignarGrupo();">Asignar</button>
         </div> 
         <div class="modal-body">
           <table id="example1" class="table table-bordered table-striped">
@@ -370,25 +267,9 @@
               <th>Acción</th>
             </tr>
             </thead>
-  
-            <tr align="center">
-              <td>Ada Lovelace</td>
-              <td>Alumno</td>
-              <td>
-               <button type="button" class="btn btn-primary" data-toggle="modal" >E</button> 
-              </td>
-            </tr>
-  
-            <tr align="center">
-              <td>Grace Hopper</td>
-              <td>PAAE</td>
-              <td>
-               <button type="button" class="btn btn-primary" data-toggle="modal">E</button> 
-              </td>
-            </tr>
-  
           </table>
         </div>
+        
         <div class="modal-footer justify-content-end">
           <button type="button"  class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         </div> 
@@ -414,14 +295,14 @@
             <div class="form-group row">
               <label for="nombreEventoAct" class="col-sm-12 col-form-label">Nombre del grupo:</label>
             <div class="col-sm-12">
-              <input type="text" class="form-control" id="nombreEventoAct" placeholder="Nombre">
+              <input type="text" class="form-control" id="nombreGrupo" placeholder="Nombre">
               </div>
             </div>
 
             <div class="form-group row">
               <label for="descripcionEventoAct" class="col-sm-12 col-form-label">Descripción: </label>
               <div class="col-sm-12">
-                <textarea class="form-control" id="texAreaText" rows="3" placeholder="Descripción"></textarea>
+                <textarea class="form-control" id="descripcionGrupo" rows="3" placeholder="Descripción"></textarea>
               </div>
            </div>
 
@@ -431,7 +312,7 @@
     </div>
       <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="ActionUpdate();">Guardar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="agregarGrupo();">Guardar</button>
       </div>
     
     
@@ -458,13 +339,13 @@
 
 <!-- NUESTROS SCRIPTS-->
 <script src="../js/login.js"></script>
-<script src="../js/evento.js"></script>
+<script src="../js/data.js"></script>
 
 
 <script>
   $(function () {
+ 
     
-    ActionRead();
     $('#example1').DataTable({
       language: {
         "decimal": "",
@@ -493,8 +374,9 @@
       "info": true,
       "autoWidth": true,
     });
+    generarAgrupamientos();
 
-    $('#example2').DataTable({
+    $('#grupos').DataTable({
       language: {
         "decimal": "",
         "emptyTable": "No hay información",
@@ -553,13 +435,7 @@
     });
 
   });
-  
 
-  $(function () {
-   
-   verificaLogin();
-   
-   });
 </script>
 
 </body>

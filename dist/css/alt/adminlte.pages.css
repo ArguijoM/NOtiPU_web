@@ -19,7 +19,12 @@
   color: #000;
   text-decoration: none;
 }
+td {border: 1px #DDD solid; padding: 5px; cursor: pointer;} 
 
+.selected { 
+    background-color: brown; 
+    color: #FFF; 
+} 
 .close:not(:disabled):not(.disabled):hover, .mailbox-attachment-close:not(:disabled):not(.disabled):hover, .close:not(:disabled):not(.disabled):focus, .mailbox-attachment-close:not(:disabled):not(.disabled):focus {
   opacity: .75;
 }

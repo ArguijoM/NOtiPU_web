@@ -1,15 +1,87 @@
 var IdEliminar  =0;
 var IdActualizar=0;
-var IdEvidencia=0;
+var idUsuario=0;
+var id_grupo=0;
+var nombreUsuario="";
 
-function ActionRead(){
+$(document).on('show.bs.modal', '.modal', function () {
+    var zIndex = 1040 + (10 * $('.modal:visible').length);
+    $(this).css('z-index', zIndex);
+    setTimeout(function() {
+        $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+    }, 0);
+});
+$(document).on('hidden.bs.modal', '.modal', function () {
+    $('.modal:visible').length && $(document.body).addClass('modal-open');
+});
+
+function generarNotificaciones(){
 
 	//varificarSecion
-	tipoEvento();
+	//tipoEvento();
 
 	$.ajax({
-	  method:"post",
-	  url: "../php/data.php",
+	  method:"GET",
+	  url: "http://localhost/NOtiPU_web/php/notipu/public/api/notificaciones",
+	  data: {
+	    accion: "read"
+	  },
+	  success: function( result ) {
+		var resultJSON = JSON.parse(result);
+
+	  	if(resultJSON.estado==1){
+
+	  		resultJSON.notificaciones.forEach(function(notificaciones){
+
+				$.ajax({
+					method:"GET",
+					url: "http://localhost/NOtiPU_web/php/notipu/public/api/grupos/"+notificaciones.Grupo_idGrupo,
+					data: {
+					  accion: "read"
+					},
+					success: function( result2 ) {
+						var respuesta = JSON.parse(result2); 
+		
+						if(respuesta.estado==1){
+							
+							var tabla=$('#example2').DataTable();
+							
+							respuesta.grupos.forEach(function(grupos){
+								
+								Botones='<div align="center"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-ver" onclick="mostrar('+notificaciones.idNotificacion+')">Ver</button>'; //BOTON EVIDENCIAS
+							   
+							  	titulo='<div align="center">'+notificaciones.titulo+'</div>';
+			  
+							  	grupo='<div align="center">'+grupos.nombre+'</div>'; //fechaInicial es el nombre que tiene la base de datos se puede cambiar
+							  
+			  
+								tabla.row.add([
+								  titulo,
+								  grupo,
+									Botones
+									]).draw().node().id=""+notificaciones.idNotificacion;
+			
+								});
+						}else
+						  alert(resultJSON2.mensaje);
+					}
+				  });
+
+	  		});
+	  		
+	  	}else
+	    	alert(resultJSON.mensaje);
+	  }
+	});
+}
+
+function generarAgrupamientos(){
+	//varificarSecion
+	
+
+	$.ajax({
+	  method:"GET",
+	  url: "http://localhost/NOtiPU_web/php/notipu/public/api/grupos",
 	  data: {
 	    accion: "read"
 	  },
@@ -20,31 +92,31 @@ function ActionRead(){
 		  
 	  	
 	  	if(resultJSON.estado==1){
-	  		
-	  		var tabla=$('#example1').DataTable();
+			var tabla=$('#example1').DataTable();
+			tabla.clear().draw();
+			generarAlumnosPorGrupo();
+			generarUsuarios();
+			
+	  		var tabla=$('#grupos').DataTable();
 
-	  		resultJSON.alta_eventos.forEach(function(alta_evento){
+	  		resultJSON.grupos.forEach(function(grupos){
 	  			
-	  			Botones='<div align="center"> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-Evidencias" onclick="IdenticaEvidencia('+alta_evento.id+');">Evid</button>'; //BOTON EVIDENCIAS
+	  			Botones='<div align="center"> <button type="button" onclick="mostrarGrupo('+grupos.idGrupo+')" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar"><i class="fas fa-edit"></i></button>'; //BOTON EVIDENCIAS
 
-				Botones=Botones+' | <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar" onclick="IdenticaActualizar('+alta_evento.id+');">Edit</button>'; //BOTON ACTUALIZAR
+				Botones=Botones+' <button type="button" class="btn btn-danger" onclick="mostrarEliminar('+grupos.idGrupo+')" data-toggle="modal" data-target="#modal-eliminar"><i class="fas fa-trash-alt"></i></button>'; //BOTON ACTUALIZAR
 
-				Botones=Botones+' | <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="IndentificaEliminar('+alta_evento.id+');">Del</button></div>'; //BOTON ELIMINAR
+				Botones=Botones+' <button type="button" class="btn btn-success" onclick="generarIdGrupo('+grupos.idGrupo+');" data-toggle="modal" data-target="#modal-default"><i class="fas fa-user-friends"></i></button></div>'; //BOTON ELIMINAR
 				 
-				NombreEvento='<div align="center">'+alta_evento.nombre+'</div>';
+				nombres='<div align="center">'+grupos.nombre+'</div>';
 
-				FechaInicialEvento='<div align="center">'+alta_evento.fecha_inicio+'</div>'; //fechaInicial es el nombre que tiene la base de datos se puede cambiar
-
-				FechaFinalEvento='<div align="center">'+alta_evento.fecha_final+'</div>'; //fechaInicial es el nombre que tiene la base de datos se puede cambiar
-				
+				descripciones='<div align="center">'+grupos.descripcion+'</div>'; //fechaInicial es el nombre que tiene la base de datos se puede cambiar
 
 
 	  			tabla.row.add([
-	  				NombreEvento,
-					FechaInicialEvento,
-					FechaFinalEvento,
+					nombres,
+					descripciones,
 	  				Botones
-	  				]).draw().node().id="row_"+alta_evento.id;
+	  				]).draw().node().id=""+grupos.idGrupo;
 
 	  		});
 	  		
@@ -54,501 +126,396 @@ function ActionRead(){
 	});
 }
 
-function tipoEvento(){
+function agregarGrupo(){
+	var nombreGrupo   = $("#nombreGrupo").val();
+	var descripcionGrupo =$("#descripcionGrupo").val();
+
 	$.ajax({
-		method:"post",
-		url: "../php/evento.php",
-		data: {
-		  accion: "read"
+		method: "POST",
+		url   : "http://localhost/NOtiPU_web/php/notipu/public/api/grupos/nuevo",
+		data  : {
+		  "nombre": nombreGrupo,
+		  "descripcion": descripcionGrupo
 		},
-        success: function( result ) {
+		success: function(result) {
+			alert(result);
+			var tabla=$('#grupos').DataTable();
+			tabla.clear().draw();
+			generarAgrupamientos();	
+			location.reload();
+			//nombreGrupo   = $("#nombreGrupo").val("");
+			//descripcionGrupo =$("#descripcionGrupo").val("");
+		  }
 
-        var resultJSON = JSON.parse(result);//Convertimos el dato JSON
+	  });
 
-		    if(resultJSON.estado == 1){//Si la variable en su posicion estado vale 1, todo saliÃ³ bien  
-			resultJSON.tipos_eventos.forEach(function(tipo_evento){//Recorremos cada valor obtenido
-				let select = document.getElementById('tipoEvento');   
-				let option = document.createElement('option');
-				option.text = tipo_evento.nombre;
-				select.appendChild(option);
-			});
-                
-            }else
-              alert(resultJSON.mensaje);//Si hubo un error, mandamos un mensaje
-        }
-      });
-}
-function ActionCreate(){
-
-	nom_Evento    = $("#nombreEvento").val();
-	obs_Evento    = $("#descripcionEvento").val();
-
-	clase_Evento  = $("#tipoEvento").val();
-	tipo_Evento   = $("#tipoPublico").val();
-////////////////////////
-	
-
-	var fecha_Inicio = "";
-	var Fecha_Final = "";
-	
-	if($("#fechaNuevo").data("daterangepicker").startDate.format("A") == "PM")
-	{
-		let horaInicio = parseInt($("#fechaNuevo").data("daterangepicker").startDate.format("hh"))+12;
-		
-			  if(horaInicio == 24)
-			  {
-                horaInicio -= 12;
-              }
-			  fecha_Inicio = $("#fechaNuevo").data("daterangepicker").startDate.format("YYYY-MM-DD "+horaInicio+":mm");
-	}
-	else{
-		let horaInicio = parseInt($("#fechaNuevo").data("daterangepicker").startDate.format("hh"));
-			 
-			if(horaInicio == 12){
-                horaInicio = 0;
-             }
-			 fecha_Inicio = $("#fechaNuevo").data("daterangepicker").startDate.format("YYYY-MM-DD "+horaInicio+":mm");
-	}
-
-	if($("#fechaNuevo").data("daterangepicker").endDate.format("A") == "PM")
-	{
-		let horaFin = parseInt($("#fechaNuevo").data("daterangepicker").endDate.format("hh"))+12;
-              
-              if(horaFin == 24){
-                horaFin -= 12;
-              }
-            
-			  Fecha_Final = $("#fechaNuevo").data("daterangepicker").endDate.format("YYYY-MM-DD "+horaFin+":mm");
-	}
-	else{
-		
-		let horaFin = parseInt($("#fechaNuevo").data("daterangepicker").endDate.format("hh"));
-		 
-		 if(horaFin == 12){
-			horaFin = 0;
-		 }
-		 Fecha_Final = $("#fechaNuevo").data("daterangepicker").endDate.format("YYYY-MM-DD "+horaFin+":mm");
-	}
-
-	
-///////////////////////////
-	
-	$.ajax({
-	  method:"post",
-	  url: "../php/data.php",
-	  data: {
-	  	accion:"create",
-	    nombre:nom_Evento,
-	    observaciones:obs_Evento,
-	    fecha_inicio:fecha_Inicio,
-	    fecha_final:Fecha_Final,
-	    clase_evento:clase_Evento,
-	    tipo_evento:tipo_Evento
-	  },
-	  success: function( result ) {
-	   
-		var resultJSON = JSON.parse(result);
-	    if(resultJSON.estado==1){
-
-	    	
-	    	var tabla=$('#example1').DataTable();
-	    	
-			Botones='<div align="center"> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-Evidencias">Evid</button>'; //BOTON EVIDENCIAS
-
-			Botones=Botones+' | <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-actualizar" onclick="IdenticaActualizar('+resultJSON.id+');">Edit</button>'; //BOTON ACTUALIZAR
-
-			Botones=Botones+' | <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="IndentificaEliminar('+resultJSON.id+');">Del</button></div>'; //BOTON ELIMINAR
-			  
-			let FechaICalen = $("#fechaNuevo").data("daterangepicker").startDate.format("DD/MM/YYYY hh:mm");
-			FechaICalen=FechaICalen.substring(0,FechaICalen.length-5);
-			let FechaFCalen = $("#fechaNuevo").data("daterangepicker").endDate.format("DD/MM/YYYY hh:mm");
-			FechaFCalen=FechaFCalen.substring(0,FechaFCalen.length-5);
-			
-			NombreEvento='<div align="center">'+nom_Evento+'</div>';
-
-			FechaInicialEvento='<div align="center">'+FechaICalen+'</div>'; //fechaInicial es el nombre que tiene la base de datos se puede cambiar
-
-			FechaFinalEvento='<div align="center">'+FechaFCalen+'</div>'; //fechaInicial es el nombre que tiene la base de datos se puede cambiar
-			
-
-				tabla.row.add([
-  				NombreEvento,
-  				FechaInicialEvento,
-  				FechaFinalEvento,
-  				Botones
-			    ]).draw().node().id="row_"+resultJSON.id;
-
-
-	    }else
-	    	alert(resultJSON.mensaje);
-	  }
-	});
-
-	$("#nombreEvento").val("");
-	$("#descripcionEvento").val("");
 }
 
-function IndentificaEliminar(id){
-	IdEliminar=id;
-
-	tabla= $("#example1").DataTable();
-	renglon=tabla.row("#row_"+IdEliminar).data();
-	nombre= renglon[0];
-	//nombre=nombre.slice(20,-6);
-	document.getElementById("eliminarAlta").innerHTML=nombre;	
-}
-function ActionDelete(){
-
-	IdElim=IdEliminar;
+function mostrar(id){
+	
+	//varificarSecion
+	//tipoEvento();
 
 	$.ajax({
-	  method:"post",
-	  url: "../php/data.php",
-	  data: {
-	    id: IdElim,
-	    accion: "delete"
-	  },
-	  success: function( result ) {
-	  	resultJSON = JSON.parse(result);
-
-	  	if(resultJSON.estado==1){
-	  		//Eliminar el renglon de la tabla
-	  		tabla = $("#example1").DataTable();
-	  		tabla.row("#row_"+IdElim).remove().draw();
-	  	}else{
-	  		alert(resultJSON.mensaje);	
-	  	}
-	  }
-	});
-}
-function IdenticaActualizar(id){
-	
-	IdActualizar=id;
-
-    tabla= $("#example1").DataTable();	
-    renglon=tabla.row("#row_"+IdActualizar).data();
-
-
-	nombre = renglon[0];
-	nombre=nombre.slice(20,-6);
-	$("#nombreEventoA").val(nombre);
-
-	obtenerDatos();	
-}
-function obtenerDatos(){
-	
-	$.ajax({
-		method:"post",
-        url: "../php/data.php",
-        data: {
-		  accion: "lecturaDatos",
-          id: IdActualizar
-        },
-        success: function( result ) {
-			
-			
-			var resultJSON = JSON.parse(result);
-			
-			
-
-			if(resultJSON.estado==1)
-			{
-				$("#texAreaText").val(resultJSON.observaciones);
-
-				let fechaInicio = resultJSON.fecha_inicio.toString();
-                let fechaFin = resultJSON.fecha_final.toString();
-
-				/*let fechaInicio = resultJSON.fecha_inicio.toString().substring(0,resultJSON.fecha_inicio.length-3);
-                let fechaFin = resultJSON.fecha_final.toString().substring(0,resultJSON.fecha_final.length-3);*/
-                $("#fechaActualizar").data("daterangepicker").setStartDate("'"+fechaInicio+"'");
-				$('#fechaActualizar').data('daterangepicker').setEndDate("'"+fechaFin+"'");
-
-				var eventoEditar = resultJSON.tipo_evento;
-				if(resultJSON.tipo_evento=="NULL")
-				{
-					$("#tipoEventoA").val("");
-				}else{
-					tipoEventoE(eventoEditar);
-				}
-				
-
-			   $('#publicoObj option').remove();
-               let select = document.getElementById('publicoObj');   
-               let option = document.createElement('option');
-               let option2 = document.createElement('option');
-               option.text = "Interno";
-               option2.text = "Externo";
-                  if(option.text == resultJSON.clase_publico){
-                    option.selected = true;
-                  }else{
-                    option2.selected = true;
-                  }
-               select.appendChild(option);
-               select.appendChild(option2);
-			   
-			}
-			else{
-				alert("datos no guardados");
-			}
-        }
-      });
-}
-function tipoEventoE(tipoE){
-	
-	$.ajax({
-		method:"post",
-		url: "../php/evento.php",
+		method:"GET",
+		url: "http://localhost/NOtiPU_web/php/notipu/public/api/notificaciones/"+id.toString(),
 		data: {
-		  accion: "read"
-		},
-		  success: function( result ) {
-  
-		  var resultJSON = JSON.parse(result);//Convertimos el dato JSON
-		  $('#tipoEventoA option').remove();
-			  if(resultJSON.estado == 1){  
-				  
-				resultJSON.tipos_eventos.forEach(function(tipo_evento){
-					  let select = document.getElementById('tipoEventoA');   
-					  let option = document.createElement('option');
-					  option.text = tipo_evento.nombre;
-					  option.value = tipo_evento.nombre;
-					  if(option.text == tipoE){
-						  option.selected = true;
-					  }
-					  select.appendChild(option);
-				  });
-				  
-			  }else
-				alert(resultJSON.mensaje);
-		  }
-		});
-}
-function ActionUpdate(){
-	
-	idAct 		  = IdActualizar;
-	nom_Evento    = $("#nombreEventoA").val();
-	obs_Evento    = $("#texAreaText").val();
-	clase_Evento  = $("#tipoEventoA").val();
-	tipo_Evento   = $("#publicoObj").val();
-	
-	
-
-	////////////////////////
-	
-
-	var fecha_Inicio = "";
-	var Fecha_Final = "";
-	
-	if($("#fechaActualizar").data("daterangepicker").startDate.format("A") == "PM")
-	{
-		let horaInicio = parseInt($("#fechaActualizar").data("daterangepicker").startDate.format("hh"))+12;
-		
-			  if(horaInicio == 24)
-			  {
-                horaInicio -= 12;
-              }
-			  fecha_Inicio = $("#fechaActualizar").data("daterangepicker").startDate.format("YYYY-MM-DD "+horaInicio+":mm");
-	}
-	else{
-		let horaInicio = parseInt($("#fechaActualizar").data("daterangepicker").startDate.format("hh"));
-			 
-			if(horaInicio == 12){
-                horaInicio = 0;
-             }
-			 fecha_Inicio = $("#fechaActualizar").data("daterangepicker").startDate.format("YYYY-MM-DD "+horaInicio+":mm");
-	}
-
-	if($("#fechaActualizar").data("daterangepicker").endDate.format("A") == "PM")
-	{
-		let horaFin = parseInt($("#fechaActualizar").data("daterangepicker").endDate.format("hh"))+12;
-              
-              if(horaFin == 24){
-                horaFin -= 12;
-              }
-            
-			  Fecha_Final = $("#fechaActualizar").data("daterangepicker").endDate.format("YYYY-MM-DD "+horaFin+":mm");
-	}
-	else{
-		
-		let horaFin = parseInt($("#fechaActualizar").data("daterangepicker").endDate.format("hh"));
-		 
-		 if(horaFin == 12){
-			horaFin = 0;
-		 }
-		 Fecha_Final = $("#fechaActualizar").data("daterangepicker").endDate.format("YYYY-MM-DD "+horaFin+":mm");
-	}
-
-	
-///////////////////////////
-    
-	$.ajax({
-	  method:"post",	
-	  url: "../php/data.php",
-	  data: {
-	    accion: "update",
-	    id:idAct,
-	    nombre:nom_Evento,
-	    observaciones:obs_Evento,
-	    fecha_inicio:fecha_Inicio,
-	    fecha_final:Fecha_Final,
-	    clase_evento:clase_Evento,
-	    tipo_evento:tipo_Evento
-	    
-	  },
-	  success: function( result ) {
-
-		
-		resultJSON = JSON.parse(result);
-		
-		  
-		  
-		  
-	  	if(resultJSON.estado==1){
-	
-			fecha_Inicio = $("#fechaActualizar").data("daterangepicker").startDate.format("DD/MM/YYYY hh:mm");
-			fecha_Inicio=fecha_Inicio.substring(0,fecha_Inicio.length-5);
-			Fecha_Final = $("#fechaActualizar").data("daterangepicker").endDate.format("DD/MM/YYYY hh:mm");
-			Fecha_Final=Fecha_Final.substring(0,Fecha_Final.length-5);
-
-			
-	  		tabla		 = $("#example1").DataTable();
-	  		
-	  		renglon		 = tabla.row("#row_"+idAct).data();
-	  		renglon[0]   = '<div align="center">'+nom_Evento+'</div>'; 
-	  		renglon[1]	 = '<div align="center">'+fecha_Inicio+'</div>';
-	  		renglon[2]   = '<div align="center">'+Fecha_Final+'</div>';
-
-			tabla.row("#row_"+idAct).data(renglon);	  
-			
-
-	  	}else
-	  	   alert(resultJSON.mensaje); 
-	  } 
-	});	
-}
-
-function IdenticaEvidencia(id){
-	IdActualizar=0;
-	IdActualizar=id;
-
-	$.ajax({
-		method:"post",
-		url: "../php/data.php",
-		data: {
-		  accion: "identificaIdEvidencias",
-		  id:IdActualizar
-		},
-		  success: function( result ) {
-
-			
-  
-		  var resultJSON = JSON.parse(result);//Convertimos el dato JSON
-		
-		  
-		  if(resultJSON.estado==1){ //EXISTE id
-			
-			mostrarDatosEvidencia();
-
-		  }
-		  else{
-			   /*LO DE ABAJO ES PARA LIMPIAR EL ALTA EVIDENCIAS*/ 
-			    var binculo="../dist/img/sinImagen.png"
-				$("#CantidadHombres").val("");
-				$("#CantidadMujeres").val("");
-				$("#Expositores").val("");
-				$("#pormenores").val("");
-				$(".img1 ").attr("src", binculo );
-				$(".img2 ").attr("src", binculo );
-				$("#image1").val("");
-				$("#image2").val("");
-				
-				/*EN ESTE CASO LA IMAGEN OCUPA REGRESAR A LA IMAGEN INICIAL
-				*/
-		  }
-		  }
-		});
-    
-}
-
-function mostrarDatosEvidencia()//editar evidencia
-{
-	$.ajax({
-		method:"post",
-        url: "../php/data.php",
-        data: {
-		  accion: "lecturaDatosEvidencia",
-          id: IdActualizar
-        },
-        success: function( result ) {
-			
-			
-			var resultJSON = JSON.parse(result);
-			
-
-			if(resultJSON.estado==1)
-			{
-				$("#CantidadHombres").val(resultJSON.cant_hombres);
-				$("#CantidadMujeres").val(resultJSON.cant_mujeres);
-				$("#Expositores").val(resultJSON.expositor);
-				$("#pormenores").val(resultJSON.pormenor);
-				$(".img1 ").attr("src", resultJSON.evid_1);
-				$(".img2 ").attr("src", resultJSON.evid_2);
-				$("#img1 ").attr("src", resultJSON.evid_1);
-				$("#img2 ").attr("src", resultJSON.evid_2);
-
-		        				/*
-
-				Img2   = $("#img2").val();
-				PARA MOSTRAR LAS IMAGENES*/
-			}
-			else{
-				alert("datos no encontrados");
-			}
-        }
-      });
-}
-
-function cargarEvidencias()//crear NUEVA evidencia
-{
-
-	idEVEN   	   = IdActualizar;
-	numHombres     = $("#CantidadHombres").val();
-	numMujeres     = $("#CantidadMujeres").val();
-	numExpositores = $("#Expositores").val();
-	pormenores     = $("#pormenores").val();
-	imge1          = $(".img1").prop('src');
-	imge2  		   = $(".img2").prop('src');
-	
-	
-	console.log(imge1);//PARA HACER CUENTITAS
-		Imge1  = imge1.substring(36,136);
-	console.log(imge2);//PARA HACER CUENTITAS
-		Imge2  = imge2.substring(36,136);
-	
-	
-	$.ajax({
-		method:"post",
-		url: "../php/data.php",
-		data: {
-		  accion:"crearEvidencia",
-		  id:idEVEN,
-		  hombres:numHombres,
-		  mujeres:numMujeres,
-		  expositores:numExpositores,
-		  porme:pormenores,
-		  imagen1:Imge1,
-		  imagen2:Imge2
+			"idGrupo": id,
 		},
 		success: function( result ) {
-
-		 alert("ALERT "+result);
+			
+			
 		  var resultJSON = JSON.parse(result);
-		  
+			if(resultJSON.estado==1){
+				resultJSON.notificacion.forEach(function(notificacion){
+					$.ajax({
+						method:"GET",
+						url: "http://localhost/NOtiPU_web/php/notipu/public/api/grupos/"+notificacion.Grupo_idGrupo,
+						data: {
+						  accion: "read"
+						},
+						success: function( result2 ) {
+							var respuesta = JSON.parse(result2); 
+			
+							if(respuesta.estado==1){
+								
+								respuesta.grupos.forEach(function(grupos){
+									
+									$("#asunto").text(''+notificacion.titulo);
+									$("#destinatario").text(''+grupos.nombre);
+									$("#descripcion").text(''+notificacion.descripcion);
+									$("#fecha").text(''+notificacion.fecha);
+				
+								});
+							}else
+							  alert(resultJSON2.mensaje);
+						}
+					  });	
+				
+				});
+				
+			}else
+			  alert(resultJSON.mensaje);
 		}
 	  });
 }
 
+function mostrarGrupo(id){
+	IdActualizar=id;
 
+	$.ajax({
+		method:"GET",
+		url: "http://localhost/NOtiPU_web/php/notipu/public/api/grupos/"+id.toString(),
+		data: {
+		  accion: "read"
+		},
+		success: function( result) {
+			var respuesta = JSON.parse(result); 
 
+			if(respuesta.estado==1){
+				
+				respuesta.grupos.forEach(function(grupos){	
+					$("#nombreEventoAct").val(''+grupos.nombre);
+					$("#grupoDescripcion").val(''+grupos.descripcion);
+				});
+			}else
+			  alert(resultJSON2.mensaje);
+		}
+	  });
+	
+}
 
+function editarGrupo(){
+	var nombreGrupo   = $("#nombreEventoAct").val();
+	var descripcionGrupo =$("#grupoDescripcion").val();
+	$.ajax({
+		method:"PUT",
+		url: "http://localhost/NOtiPU_web/php/notipu/public/api/grupos/modificar/"+IdActualizar,
+		data: {
+			"nombre": nombreGrupo,
+			"descripcion": descripcionGrupo,
+		},
+		success: function( result) {
+			respuesta = $.parseJSON(result); 
+			
+			tabla	= $("#grupos").DataTable();
+			renglon = tabla.row(""+IdActualizar).data();
+			renglon[0]   = '<div align="center">'+nombreGrupo+'</div>'; 
+	  		renglon[1]	 = '<div align="center">'+descripcionGrupo+'</div>';
+			tabla.row(""+IdActualizar).data(renglon);	
+			
+			alert(respuesta);
+		}
+	  });
+	  
 
+}
+
+function mostrarEliminar(id){
+	IdEliminar =id;
+}
+function generarIdGrupo(id){
+	
+	$.ajax({
+		method:"GET",
+		url: "http://localhost/NOtiPU_web/php/notipu/public/api/grupos/"+id,
+		data: {
+		  accion: "read"
+		},
+		success: function( result) {
+			var respuesta = JSON.parse(result); 
+
+			if(respuesta.estado==1){
+				
+				respuesta.grupos.forEach(function(grupos){	
+					$("#nombre_Grupo").text("Alumnos del grupo: "+grupos.nombre);
+				});
+			}else
+			  alert(resultJSON2.mensaje);
+		}
+	  });
+	
+	id_grupo=id;
+	var tabla=$('#example1').DataTable();
+	tabla.clear().draw();
+	generarAlumnosPorGrupo();
+}
+
+function eliminarUsuarioGrupo(id){
+	$.ajax({
+		method:"DELETE",
+		url: "http://localhost/NOtiPU_web/php/notipu/public/api/agrupamientos/delete/"+id,
+		data: {
+			accion: "read",
+		},
+		success: function( result) {
+			respuesta = $.parseJSON(result); 
+			if(respuesta){
+				var tabla=$('#example1').DataTable();
+				tabla.clear().draw();
+				generarAlumnosPorGrupo();
+			}
+		}
+	  });
+
+	
+
+}
+
+function eliminarGrupo(){
+	$.ajax({
+		method:"DELETE",
+		url: "http://localhost/NOtiPU_web/php/notipu/public/api/grupos/delete/"+IdEliminar,
+		data: {
+			accion: "read",
+		},
+		success: function( result) {
+			respuesta = $.parseJSON(result); 
+			
+			alert(respuesta);
+			var tabla=$('#grupos').DataTable();
+			tabla.clear().draw();
+			generarAgrupamientos();
+		}
+	  });
+}
+
+function agrupar(id){
+	alert(id);
+}
+
+function generarGrupos() { 
+	$.ajax({
+		method:"GET",
+		url: "http://localhost/NOtiPU_web/php/notipu/public/api/grupos",
+		data: {
+		  accion: "read"
+		},
+		success: function( result) {
+			var respuesta = JSON.parse(result); 
+
+			if(respuesta.estado==1){
+				
+				respuesta.grupos.forEach(function(grupos){	
+					$('#nuevoGrupo').append(new Option(grupos.nombre));
+				});
+			}else
+			  alert(respuesta.mensaje);
+		}
+	  });
+
+} 
+
+function guardarNotificacion(){
+	var titulo   = $("#nuevoAsunto").val();
+	var descripcion = $("#nuevaDescripcion").val();
+	var f = new Date();
+	var nombre = $('#nuevoGrupo').find(":selected").text();
+	var Idgrupo=0;
+	var fecha ="";
+	fecha =""+f.getFullYear()+"-"+f.getMonth()+1+"-"+f.getDate()+" "+f.getHours()+"-"+f.getMinutes()+"-"+f.getSeconds();
+	//Consultar el id del grupo
+	$.ajax({
+		method:"GET",
+		url: "http://localhost/NOtiPU_web/php/notipu/public/api/gruposN/"+nombre,
+		data: {
+		  accion: "read"
+		},
+		success: function( result) {
+			var respuesta = JSON.parse(result); 
+
+			if(respuesta.estado==1){
+				
+				respuesta.grupos.forEach(function(grupos){	
+					//Idgrupo=grupos.idGrupo;
+					$.ajax({
+						method: "POST",
+						url   : "http://localhost/NOtiPU_web/php/notipu/public/api/notificaciones/nuevo",
+						data  : {
+						  "titulo": titulo,
+						  "descripcion": descripcion,
+						  "fecha": fecha,
+						  "Grupo_idGrupo": grupos.idGrupo
+						},
+						success: function( result2 ) {
+				  
+						  respuesta2 = $.parseJSON(result2); 
+					   
+						  if(respuesta.estado==1){
+							  alert(respuesta2);
+							  location.reload();
+				  
+						  }else{
+							  alert(respuesta2);
+				  
+						  }
+				  
+						}
+					  });
+				});
+			}else
+			  alert(respuesta.mensaje);
+		}
+	  });
+}
+
+function generarUsuarios(){
+	//generarGrupos();
+
+	
+	var tabla=$('#example3').DataTable();
+	$.ajax({
+		method:"GET",
+		url: "http://localhost/NOtiPU_web/php/notipu/public/api/usuarios",
+		data: {
+		  accion: "read"
+		},
+		success: function( result) {
+			var respuesta = JSON.parse(result); 
+
+			if(respuesta.estado==1){
+			
+				
+				respuesta.usuarios.forEach(function(usuarios){
+
+					Botones = '<div align="center"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-eliminar-usuario">E</button>';	
+					nombres=usuarios.nombrecompleto;
+					funcion=usuarios.tipo; 
+
+					tabla.row.add([
+						nombres,
+						funcion,
+						Botones
+						  ]).draw().node().id=""+usuarios.idUsuario;
+				});
+				
+				
+				$("#example3 tr").click(function(){
+					$(this).addClass('selected').siblings().removeClass('selected');
+					idUsuario = this.id;    
+					nombreUsuario=$(this).find('td:first').html();  
+				 });
+				 
+				 $('#ok').on('click', function(e){
+					var nombreUsuario =$("#example3 tr.selected td:first").html();
+					//alert(nombreUsuario);
+				 });
+	
+			}else
+			  alert(respuesta.mensaje);
+
+			}
+	  });
+}
+
+function asignarGrupo(){
+	
+	//var nombreGrupo = $('#nuevoGrupo').find(":selected").text();
+	$.ajax({
+		method:"POST",
+		url: "http://localhost/NOtiPU_web/php/notipu/public/api/agrupamientos/nuevo",
+		data: {
+			"Usuario_idUsuario": idUsuario,
+			"Grupo_idGrupo": id_grupo,
+		},
+		success: function(result) {
+				//alert(result);
+				var tabla=$('#example1').DataTable();
+				tabla.clear().draw();
+				generarAlumnosPorGrupo();	
+			}
+		});	
+	  
+}
+
+function generarAlumnosPorGrupo(){
+	$.ajax({
+		method: "GET",
+		url   : "http://localhost/NOtiPU_web/php/notipu/public/api/agrupamientosGrupo/"+id_grupo,
+		data  : {
+			accion: "read"
+		},
+		success: function( result2 ) {
+			var respuesta2 = JSON.parse(result2); 
+			if(respuesta2.estado==1){
+				respuesta2.agrupamiento.forEach(function(agrupamiento){
+					id_usuario=agrupamiento.Usuario_idUsuario;
+					$.ajax({
+						method:"GET",
+						url: "http://localhost/NOtiPU_web/php/notipu/public/api/usuarios/"+id_usuario,
+						data: {
+							accion: "read"
+						},
+						success: function( result3) {
+							var respuesta3 = JSON.parse(result3); 
+				
+							if(respuesta3.estado==1){
+								var tabla=$('#example1').DataTable();
+								
+								respuesta3.usuarios.forEach(function(usuarios){
+									Botones = '<div align="center"> <button type="button" onclick="eliminarUsuarioGrupo('+usuarios.idUsuario+');" class="btn btn-primary">E</button>';	
+									nombres=usuarios.nombrecompleto;
+									funcion=usuarios.tipo; 
+				
+									tabla.row.add([
+										nombres,
+										funcion,
+										Botones
+											]).draw().node().id=""+usuarios.idUsuario;
+								});
+								
+							}else
+								alert(respuesta3.mensaje);
+				
+							}
+						});
+			});
+			}
+
+		}
+		});
+}
+
+function eliminarUsuario(){
+	alert(idUsuario);
+}

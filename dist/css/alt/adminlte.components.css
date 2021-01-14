@@ -12,6 +12,12 @@
 .form-group.has-icon .form-control {
   padding-right: 35px;
 }
+td {border: 1px #DDD solid; padding: 5px; cursor: pointer;} 
+
+.selected { 
+    background-color: brown; 
+    color: #FFF; 
+} 
 
 .form-group.has-icon .form-icon {
   background-color: transparent;
@@ -4382,6 +4388,12 @@ html.maximized-card {
   top: 0;
   width: 100%;
   z-index: 1052;
+}
+.modal:nth-of-type(even) {
+  z-index: 1052 !important;
+}
+.modal-backdrop.show:nth-of-type(even) {
+  z-index: 1051 !important;
 }
 
 .modal-content.bg-warning .modal-header,

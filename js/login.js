@@ -1,26 +1,25 @@
 
 
 function login(){
-	window.location.replace("pages/inicio.html");
-	/*var varEmail   = $("#email").val();
-	var varPassword1 = $("#password1").val();
+	//window.location.replace("pages/inicio.html");
+	var varEmail   = $("#email").val();
+	//var varPassword1 = $("#password1").val();
 
 	$.ajax({
-	  method: "post",
-	  url   : "php/login.php",
+	  method: "GET",
+	  url   : "http://localhost/NOtiPU_web/php/notipu/public/api/usuarios/"+varEmail.toString(),
 	  data  : {
 	    "email": varEmail,
-	    "password1":varPassword1,
-	    "accion":"login"
+	   // "password1":varPassword1,
+	   // "accion":"login"
 	  },
 	  success: function( result ) {
 	  	console.log(result);
 
 	    respuesta = $.parseJSON(result); 
      
-	    if(respuesta.estatus==1){
-	    	alert(respuesta.mensaje);
-	    	window.location.replace("pages/calendar.html");
+	    if(respuesta.estado==1){
+	    	window.location.replace("pages/inicio.html");
 
 	    }else{
 	    	alert(respuesta.mensaje);
@@ -28,7 +27,7 @@ function login(){
 	    }
 
 	  }
-	});*/
+	});
 }
 
 
