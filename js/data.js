@@ -239,10 +239,6 @@ function editarGrupo(){
 			tabla	= $("#grupos").DataTable();
 			tabla.clear().draw();
 			generarAgrupamientos();
-			////////////////////////////////////////////////////
-				
-			
-			alert(respuesta);
 		}
 	  });
 	  

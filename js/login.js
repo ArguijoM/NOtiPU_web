@@ -11,11 +11,11 @@ function loginPrueba(){
 			"clave":clave
 		},
 		success: function(result) {
-			respuesta = $.parseJSON(result);
-			if(respuesta.mensaje=="Acceso correcto"){
+			let resultJSON = JSON.parse(result);
+			if(resultJSON.estado==1){
 				window.location.replace("pages/inicio.html");
 			}else{
-				alert(respuesta.mensaje);
+				alert(resultJSON.mensaje);
 			}
 		}
 	  });
