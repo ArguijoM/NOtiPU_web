@@ -69,8 +69,7 @@ function generarNotificaciones(){
 
 	  		});
 	  		
-	  	}else
-	    	alert(resultJSON.mensaje);
+	  	}
 	  }
 	});
 }
@@ -138,7 +137,6 @@ function agregarGrupo(){
 		  "descripcion": descripcionGrupo
 		},
 		success: function(result) {
-			alert(result);
 			var tabla=$('#grupos').DataTable();
 			tabla.clear().draw();
 			generarAgrupamientos();	
@@ -239,10 +237,10 @@ function editarGrupo(){
 			respuesta = $.parseJSON(result); 
 			
 			tabla	= $("#grupos").DataTable();
-			renglon = tabla.row(""+IdActualizar).data();
-			renglon[0]   = '<div align="center">'+nombreGrupo+'</div>'; 
-	  		renglon[1]	 = '<div align="center">'+descripcionGrupo+'</div>';
-			tabla.row(""+IdActualizar).data(renglon);	
+			tabla.clear().draw();
+			generarAgrupamientos();
+			////////////////////////////////////////////////////
+				
 			
 			alert(respuesta);
 		}
@@ -297,9 +295,6 @@ function eliminarUsuarioGrupo(id){
 			}
 		}
 	  });
-
-	
-
 }
 
 function eliminarGrupo(){
@@ -311,11 +306,10 @@ function eliminarGrupo(){
 		},
 		success: function( result) {
 			respuesta = $.parseJSON(result); 
-			
-			alert(respuesta);
-			var tabla=$('#grupos').DataTable();
-			tabla.clear().draw();
-			generarAgrupamientos();
+			location.reload();
+			//var tabla=$('#grupos').DataTable();
+			//tabla.clear().draw();
+			//generarAgrupamientos();
 		}
 	  });
 }
@@ -382,11 +376,7 @@ function guardarNotificacion(){
 						  respuesta2 = $.parseJSON(result2); 
 					   
 						  if(respuesta.estado==1){
-							  alert(respuesta2);
 							  location.reload();
-				  
-						  }else{
-							  alert(respuesta2);
 				  
 						  }
 				  
@@ -404,6 +394,7 @@ function generarUsuarios(){
 
 	
 	var tabla=$('#example3').DataTable();
+	tabla.clear().draw();
 	$.ajax({
 		method:"GET",
 		url: "http://localhost/NOtiPU_web/php/notipu/public/api/usuarios",
@@ -426,7 +417,7 @@ function generarUsuarios(){
 						nombres,
 						funcion,
 						Botones
-						  ]).draw().node().id=""+usuarios.idUsuario;
+						  ]).draw().node().id=usuarios.idUsuario;
 				});
 				
 				
@@ -517,5 +508,32 @@ function generarAlumnosPorGrupo(){
 }
 
 function eliminarUsuario(){
-	alert(idUsuario);
+	//alert(idUsuario);
+
+	$.ajax({
+		method:"DELETE",
+		url: "http://localhost/NOtiPU_web/php/notipu/public/api/agrupamientos/delete/"+idUsuario,
+		data: {
+			accion: "read",
+		},
+		success: function( result) {
+			respuesta = $.parseJSON(result); 
+			if(respuesta){
+				$.ajax({
+					method:"DELETE",
+					url: "http://localhost/NOtiPU_web/php/notipu/public/api/usuarios/delete/"+idUsuario,
+					data: {
+						accion: "read",
+					},
+					success: function( result2) {
+						if(result2){
+							generarUsuarios();
+						}
+					}
+				  });
+			}
+		}
+	  });
+
+	
 }

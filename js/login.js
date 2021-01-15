@@ -1,28 +1,65 @@
 
-
-function login(){
-	//window.location.replace("pages/inicio.html");
-	var varEmail   = $("#email").val();
-	//var varPassword1 = $("#password1").val();
+function loginPrueba(){
+	var usuario   = $("#usuario").val();
+	var clave = $("#clave").val();
 
 	$.ajax({
-	  method: "GET",
-	  url   : "http://localhost/NOtiPU_web/php/notipu/public/api/usuarios/"+varEmail.toString(),
+		method: "get",
+		url   : "http://sistemas.upiiz.ipn.mx/isc/nopu/api/login.php",
+		data  : {
+			"usuario":usuario,
+			"clave":clave
+		},
+		success: function(result) {
+			respuesta = $.parseJSON(result);
+			if(respuesta.mensaje=="Acceso correcto"){
+				window.location.replace("pages/inicio.html");
+			}else{
+				alert(respuesta.mensaje);
+			}
+		}
+	  });
+}
+
+function loginPrueba2(){
+	$.ajax({
+		method: "GET",
+		url   : "http://sistemas.upiiz.ipn.mx/isc/nopu/api/login.php?usuario=121179&clave=121179",
+		success: function(result) {
+			let resultJSON = JSON.parse(result);
+			if(resultJSON.estado==1){
+				window.location.replace("pages/inicio.html");
+			}else{
+				alert(resultJSON.mensaje);
+			}
+		}
+	  });
+}
+
+
+
+function login(){
+	var varEmail   = $("#nombrecompleto").val();
+	var varPassword1 = $("#token").val();
+
+	$.ajax({
+	  method: "post",
+	  url   : "php/login.php",
 	  data  : {
-	    "email": varEmail,
-	   // "password1":varPassword1,
-	   // "accion":"login"
+	    "nombrecompleto": varEmail,
+	    "token":varPassword1
 	  },
 	  success: function( result ) {
 	  	console.log(result);
 
 	    respuesta = $.parseJSON(result); 
      
-	    if(respuesta.estado==1){
+	    if(respuesta.estatus==1){
+			alert(respuesta.mensaje);
 	    	window.location.replace("pages/inicio.html");
 
 	    }else{
-	    	alert(respuesta.mensaje);
+			alert(respuesta.mensaje);
 
 	    }
 
@@ -48,7 +85,7 @@ function logout(){
 }
 
 function verificaLogin(){
-//	alert("ENTRA A VERIFICAR EVENTO");
+	alert("ENTRA A VERIFICAR EVENTO");
 	
 	$.ajax({
 		method: "post",
