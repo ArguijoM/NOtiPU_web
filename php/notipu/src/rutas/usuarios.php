@@ -2,6 +2,8 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, DELETE, PUT, GET, OPTIONS');
 
+
+
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
@@ -84,16 +86,43 @@ $app->get('/api/usuariosN/{id}', function(Request $request, Response $response){
   }
 }); 
 
+// GET Recueperar Usuarios por boleta
+$app->get('/api/usuariosBoleta/{id}', function(Request $request, Response $response){
+  $Respuesta['usuario']=array();
+  $boleta = $request->getAttribute('id');
+  $sql = "SELECT * FROM usuario WHERE boleta = $boleta";
+  try{
+    $db = new db();
+    $db = $db->conectDB();
+    $resultado = $db->query($sql);
+
+    if ($resultado->rowCount() > 0){
+      $Respuesta['usuario'] = $resultado->fetchAll(PDO::FETCH_OBJ);
+      $Respuesta['estado']=1;
+      $Respuesta['mensaje']='La consulta se realizó exitosamente';
+    }else {
+      $Respuesta['estado']=0;
+      $Respuesta['mensaje']='No existe el usuario';
+    }
+    echo json_encode($Respuesta);
+    $resultado = null;
+    $db = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+}); 
+
 
 // POST Crear nuevo Usuario 
 $app->post('/api/usuarios/nuevo', function(Request $request, Response $response){
    $nombrecompleto = $request->getParam('nombrecompleto');
    $token = $request->getParam('token');
+   $boleta =$request->getParam('boleta');
    $tipo = $request->getParam('tipo');
    $Programa_idPrograma = $request->getParam('Programa_idPrograma');
   
-  $sql = "INSERT INTO usuario (nombrecompleto, token, tipo, Programa_idPrograma) VALUES 
-          (:nombrecompleto, :token, :tipo, :Programa_idPrograma)";
+  $sql = "INSERT INTO usuario (nombrecompleto, token, boleta, tipo, Programa_idPrograma) VALUES 
+          (:nombrecompleto, :token, :boleta,:tipo, :Programa_idPrograma)";
   try{
     $db = new db();
     $db = $db->conectDB();
@@ -101,6 +130,7 @@ $app->post('/api/usuarios/nuevo', function(Request $request, Response $response)
 
     $resultado->bindParam(':nombrecompleto', $nombrecompleto);
     $resultado->bindParam(':token', $token);
+    $resultado->bindParam(':boleta', $boleta);
     $resultado->bindParam(':tipo', $tipo);
     $resultado->bindParam(':Programa_idPrograma', $Programa_idPrograma);
 
@@ -153,6 +183,33 @@ $app->put('/api/usuarios/modificar/{id}', function(Request $request, Response $r
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
 }); 
+
+// PUT token usuario
+$app->put('/api/usuarios/modificarToken/{id}', function(Request $request, Response $response){
+  $idUsuario = $request->getAttribute('id');
+  $token = $request->getParam('token');
+ 
+ $sql = "UPDATE usuario SET
+         token = :token
+       WHERE idUsuario = $idUsuario";
+    
+ try{
+   $db = new db();
+   $db = $db->conectDB();
+   $resultado = $db->prepare($sql);
+
+   $resultado->bindParam(':token', $token);
+
+   $resultado->execute();
+   echo json_encode("Usuario modificado.");  
+
+   $resultado = null;
+   $db = null;
+ }catch(PDOException $e){
+   echo '{"error" : {"text":'.$e->getMessage().'}';
+ }
+}); 
+
 
 
 // DELETE borar cliente 
@@ -208,10 +265,36 @@ $app->get('/api/notificaciones', function(Request $request, Response $response){
   }
 }); 
 
+
 $app->get('/api/notificaciones/{id}', function(Request $request, Response $response){
   $Respuesta['notificacion']=array();
   $id_notificacion = $request->getAttribute('id');
   $sql = "SELECT * FROM notificacion WHERE idNotificacion = $id_notificacion";
+  try{
+    $db = new db();
+    $db = $db->conectDB();
+    $resultado = $db->query($sql);
+
+    if ($resultado->rowCount() > 0){
+      $Respuesta['notificacion'] = $resultado->fetchAll(PDO::FETCH_OBJ);
+      $Respuesta['estado']=1;
+      $Respuesta['mensaje']='La consulta se realizó exitosamente';
+    }else {
+      $Respuesta['estado']=0;
+      $Respuesta['mensaje']='No existe el usuario';
+    }
+    echo json_encode($Respuesta);
+    $resultado = null;
+    $db = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+}); 
+//GET NOTIFICACIONES POR ID DE GRUPO
+$app->get('/api/notificacionesGrupo/{id}', function(Request $request, Response $response){
+  $Respuesta['notificacion']=array();
+  $id_grupo = $request->getAttribute('id');
+  $sql = "SELECT * FROM notificacion WHERE Grupo_idGrupo = $id_grupo";
   try{
     $db = new db();
     $db = $db->conectDB();
@@ -527,6 +610,32 @@ $app->get('/api/agrupamientosGrupo/{id}', function(Request $request, Response $r
   }
 }); 
 
+// GET agrupamiento por ID de Usuario
+$app->get('/api/agrupamientosUsuario/{id}', function(Request $request, Response $response){
+  $Respuesta['agrupamiento']=array();
+  $id_agrupamiento = $request->getAttribute('id');
+  $sql = "SELECT * FROM agrupamiento WHERE Usuario_idUsuario = $id_agrupamiento";
+  try{
+    $db = new db();
+    $db = $db->conectDB();
+    $resultado = $db->query($sql);
+
+    if ($resultado->rowCount() > 0){
+      $Respuesta['agrupamiento'] = $resultado->fetchAll(PDO::FETCH_OBJ);
+      $Respuesta['estado']=1;
+      $Respuesta['mensaje']='La consulta se realizó exitosamente';
+    }else {
+      $Respuesta['estado']=0;
+      $Respuesta['mensaje']='No existe el agrupamiento';
+    }
+    echo json_encode($Respuesta);
+    $resultado = null;
+    $db = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
+
 // POST Crear nuevo agrupamiento 
 $app->post('/api/agrupamientos/nuevo', function(Request $request, Response $response){
   $Usuario_idUsuario = $request->getParam('Usuario_idUsuario');
@@ -576,6 +685,60 @@ $app->delete('/api/agrupamientos/delete/{id}', function(Request $request, Respon
  }
 }); 
 
+
+///////////////////////PROGRAMA////////////////////////////////////
+// GET Recueperar Usuarios por ID 
+
+// POST Crear nuevo programa
+$app->post('/api/programas/nuevo', function(Request $request, Response $response){
+  $Nombre = $request->getParam('Nombre');
+  $Descripcion = $request->getParam('Descripcion');
+ 
+ $sql = "INSERT INTO programa (Nombre, Descripcion) VALUES 
+         (:Nombre, :Descripcion)";
+ try{
+   $db = new db();
+   $db = $db->conectDB();
+   $resultado = $db->prepare($sql);
+
+   $resultado->bindParam(':Nombre', $Nombre);
+   $resultado->bindParam(':Descripcion', $Descripcion);
+
+   $resultado->execute();
+   echo json_encode("Nuevo grupo guardado.");  
+
+   $resultado = null;
+   $db = null;
+ }catch(PDOException $e){
+   echo '{"error" : {"text":'.$e->getMessage().'}';
+ }
+});
+
+// GET programa por nombre de programa
+$app->get('/api/programas/{id}', function(Request $request, Response $response){
+  $Respuesta['programa']=array();
+  $id_programa = $request->getAttribute('id');
+  $sql = "SELECT * FROM programa WHERE Nombre = '$id_programa'";
+  try{
+    $db = new db();
+    $db = $db->conectDB();
+    $resultado = $db->query($sql);
+
+    if ($resultado->rowCount() > 0){
+      $Respuesta['programa'] = $resultado->fetchAll(PDO::FETCH_OBJ);
+      $Respuesta['estado']=1;
+      $Respuesta['mensaje']='La consulta se realizó exitosamente';
+    }else {
+      $Respuesta['estado']=0;
+      $Respuesta['mensaje']='No existe el agrupamiento';
+    }
+    echo json_encode($Respuesta);
+    $resultado = null;
+    $db = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+}); 
 
 
 

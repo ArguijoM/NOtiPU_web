@@ -3,6 +3,7 @@ var IdActualizar=0;
 var idUsuario=0;
 var id_grupo=0;
 var nombreUsuario="";
+var exist;
 
 $(document).on('show.bs.modal', '.modal', function () {
     var zIndex = 1040 + (10 * $('.modal:visible').length);
@@ -14,6 +15,63 @@ $(document).on('show.bs.modal', '.modal', function () {
 $(document).on('hidden.bs.modal', '.modal', function () {
     $('.modal:visible').length && $(document.body).addClass('modal-open');
 });
+
+function firebaseMessaging(grup,tit,desc){
+	var token="";
+	$.ajax({
+		method: "GET",
+		url   : "http://localhost/NOtiPU_web/php/notipu/public/api/agrupamientosGrupo/"+grup,
+		data  : {
+			accion: "read"
+		},
+		success: function( result2 ) {
+			var respuesta2 = JSON.parse(result2);
+			if(respuesta2.estado==1){
+				respuesta2.agrupamiento.forEach(function(agrupamiento){
+					$.ajax({
+						method:"GET",
+						url: "http://localhost/NOtiPU_web/php/notipu/public/api/usuarios/"+agrupamiento.Usuario_idUsuario,
+						data: {
+							accion: "read"
+						},
+						success: function( result3) {
+							var respuesta3 = JSON.parse(result3); 
+				
+							if(respuesta3.estado==1){	
+								respuesta3.usuarios.forEach(function(usuarios){
+									token = usuarios.token;
+									//token = "ejbyNs9RR-G3RSMr1qMBO8:APA91bESLb_8VsNPwER6OZ3R4GjMGu1OUtdwVuSBGdnHj4W8rjKOpHamzoHj-Wnt4lzzBLfZtV5W_E4D-Sk4KpTJMQHp_CVunylPYnd4ewHnJkMLK-T7W2pTRzQ561SBAGFAI-P9uL5r"
+									$.ajax({        
+										type : 'POST',
+										url : "https://fcm.googleapis.com/fcm/send",
+										headers : {
+											Authorization : 'key=' + 'AAAAlFB6NyI:APA91bHvdsBl7D-CMph0-b84mWTG0xnvfYRnC89MuJru9fOqTlxI4dBWMY2cN664NOedHbhW4QX-4x-l03oW6KYWt6SBlam2wexTziHAV-vyWaqoRBUKBs-KXiSEeMhnWIZE4qigFp8l'
+										},
+										contentType : 'application/json',
+										dataType: 'json',
+										data: JSON.stringify({"to":token, "notification": {"title":tit,"body":desc}}),
+										success : function(response) {
+											console.log(response);
+										},
+										error : function(xhr, status, error) {
+											console.log(xhr.error);                   
+										}
+									});
+								});
+								
+							}else
+							console.log(respuesta3.mensaje);
+				
+							}
+						});
+				});
+				
+			}else{
+				console.log(respuesta2.mensaje);
+			}
+		}
+		});	
+}
 
 function generarNotificaciones(){
 
@@ -372,8 +430,12 @@ function guardarNotificacion(){
 						  respuesta2 = $.parseJSON(result2); 
 					   
 						  if(respuesta.estado==1){
-							  location.reload();
-				  
+							firebaseMessaging(grupos.idGrupo,titulo,descripcion);
+							var tabla=$('#example2').DataTable();
+							tabla.clear().draw();
+							titulo   = $("#nuevoAsunto").val("");
+							descripcion = $("#nuevaDescripcion").val("");
+							generarNotificaciones();
 						  }
 				  
 						}
@@ -436,23 +498,48 @@ function generarUsuarios(){
 }
 
 function asignarGrupo(){
-	
-	//var nombreGrupo = $('#nuevoGrupo').find(":selected").text();
+	exist=0;
 	$.ajax({
-		method:"POST",
-		url: "http://localhost/NOtiPU_web/php/notipu/public/api/agrupamientos/nuevo",
-		data: {
-			"Usuario_idUsuario": idUsuario,
-			"Grupo_idGrupo": id_grupo,
+		method: "GET",
+		url   : "http://localhost/NOtiPU_web/php/notipu/public/api/agrupamientosGrupo/"+id_grupo,
+		data  : {
+			accion: "read"
 		},
-		success: function(result) {
-				//alert(result);
-				var tabla=$('#example1').DataTable();
-				tabla.clear().draw();
-				generarAlumnosPorGrupo();	
+		success: function( result2 ) {
+			var respuesta2 = JSON.parse(result2);
+			if(respuesta2.estado==1){
+				respuesta2.agrupamiento.forEach(function(agrupamiento){
+					if(agrupamiento.Usuario_idUsuario == idUsuario){
+						exist=exist+1;
+					}
+				});
+				agregarUsuarioGrupo(exist);
+			}else{
+				agregarUsuarioGrupo(0);
 			}
+		}
 		});	
-	  
+}
+
+function agregarUsuarioGrupo(e){
+	if(e>0){
+		alert("El usuario ya forma parte del grupo");
+	}else{
+		$.ajax({
+			method:"POST",
+			url: "http://localhost/NOtiPU_web/php/notipu/public/api/agrupamientos/nuevo",
+			data: {
+				"Usuario_idUsuario": idUsuario,
+				"Grupo_idGrupo": id_grupo,
+			},
+			success: function(result) {
+					//alert(result);
+					var tabla=$('#example1').DataTable();
+					tabla.clear().draw();
+					generarAlumnosPorGrupo();	
+				}
+			});
+	}
 }
 
 function generarAlumnosPorGrupo(){

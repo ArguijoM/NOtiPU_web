@@ -8,9 +8,12 @@ table.dataTable {
 }
 
 
+td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
+
 .selected {
-    color: #FF0000;
+    color: rgb(255, 0, 255);
 }
+
 table.dataTable td,
 table.dataTable th {
   -webkit-box-sizing: content-box;
