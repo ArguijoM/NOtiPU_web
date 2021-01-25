@@ -9,6 +9,58 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app = new \Slim\App;
 
+// validar usuario Login
+$app->get('/api/loginUsuario/{id}', function(Request $request, Response $response){
+  $Respuesta['usuario']=array();
+  $usuario = $request->getAttribute('id');
+  $sql = "SELECT * FROM login WHERE usuario=$usuario";
+  try{
+    $db = new db();
+    $db = $db->conectDB();
+    $resultado = $db->query($sql);
+
+    if ($resultado->rowCount() > 0){
+      $Respuesta['usuario'] = $resultado->fetchAll(PDO::FETCH_OBJ);
+      $Respuesta['estado']=1;
+      $Respuesta['mensaje']='La consulta se realizó exitosamente';
+    }else {
+      $Respuesta['estado']=0;
+      $Respuesta['mensaje']='No existe el usuario';
+    }
+    echo json_encode($Respuesta);
+    $resultado = null;
+    $db = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+}); 
+
+// validar usuario clave
+$app->get('/api/loginClave/{id}', function(Request $request, Response $response){
+  $Respuesta['usuario']=array();
+  $clave = $request->getAttribute('id');
+  $sql = "SELECT * FROM login WHERE clave=$clave";
+  try{
+    $db = new db();
+    $db = $db->conectDB();
+    $resultado = $db->query($sql);
+
+    if ($resultado->rowCount() > 0){
+      $Respuesta['usuario'] = $resultado->fetchAll(PDO::FETCH_OBJ);
+      $Respuesta['estado']=1;
+      $Respuesta['mensaje']='La consulta se realizó exitosamente';
+    }else {
+      $Respuesta['estado']=0;
+      $Respuesta['mensaje']='No existe el usuario';
+    }
+    echo json_encode($Respuesta);
+    $resultado = null;
+    $db = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+}); 
+
 // GET Todos los usuarios 
 $app->get('/api/usuarios', function(Request $request, Response $response){
   $Respuesta['usuarios']=array();
@@ -85,6 +137,7 @@ $app->get('/api/usuariosN/{id}', function(Request $request, Response $response){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
 }); 
+
 
 // GET Recueperar Usuarios por boleta
 $app->get('/api/usuariosBoleta/{id}', function(Request $request, Response $response){

@@ -2,39 +2,42 @@
 function loginPrueba(){
 	var usuario   = $("#usuario").val();
 	var clave = $("#clave").val();
-
-	$.ajax({
-		method: "get",
-		url   : "http://sistemas.upiiz.ipn.mx/isc/nopu/api/login.php",
-		data  : {
-			"usuario":usuario,
-			"clave":clave
-		},
-		success: function(result) {
-			let resultJSON = JSON.parse(result);
-			if(resultJSON.estado==1){
-				window.location.replace("pages/inicio.html");
-			}else{
-				alert(resultJSON.mensaje);
+	try {
+		$.ajax({
+			method: "get",
+			url   : "http://localhost/NOtiPU_web/php/notipu/public/api/loginUsuario/"+usuario,
+			data  : {
+				"usuario":usuario
+			},
+			success: function(result) {
+				let resultJSON = JSON.parse(result);
+				if(resultJSON.estado==1){
+					$.ajax({
+						method: "get",
+						url   : "http://localhost/NOtiPU_web/php/notipu/public/api/loginClave/"+clave,
+						data  : {
+							"clave":clave
+						},
+						success: function(result) {
+							let resultJSON = JSON.parse(result);
+							if(resultJSON.estado==1){
+								window.location.replace("pages/inicio.html");
+							}else{
+								alert("Usuario y/o contraseña incorrectos");
+							}
+						}
+					  });
+				}else{
+					alert("Usuario y/o contraseña incorrectos");
+				}
 			}
-		}
-	  });
+		  });
+		
+	} catch (error) {
+		alert("Ingrese los datos correspondientes");
+	}
 }
 
-function loginPrueba2(){
-	$.ajax({
-		method: "GET",
-		url   : "http://sistemas.upiiz.ipn.mx/isc/nopu/api/login.php?usuario=121179&clave=121179",
-		success: function(result) {
-			let resultJSON = JSON.parse(result);
-			if(resultJSON.estado==1){
-				window.location.replace("pages/inicio.html");
-			}else{
-				alert(resultJSON.mensaje);
-			}
-		}
-	  });
-}
 
 
 
